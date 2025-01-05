@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+{% block content %}
+    {% include 'navbar.html' %}
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-8">Proyek Saya</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for project in projects %}
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden">
+        <!-- Thumbnail Proyek -->
+        <img
+          src="{{ project.thumbnail.url }}"
+          alt="{{ project.title }}"
+          class="w-full h-48 object-cover"
+        >
+
+        <div class="p-6">
+          <h2 class="text-2xl font-semibold mb-3">{{ project.title }}</h2>
+
+          <!-- Teknologi -->
+          <div class="flex flex-wrap gap-2 mb-4">
+            {% for technology in project.technologies.all %}
+              <div class="flex items-center bg-gray-100 rounded-full px-2 py-1">
+                {% if technology.icon %}
+                  <img
+                    src="{{ technology.icon.url }}"
+                    alt="{{ technology.name }}"
+                    class="w-4 h-4 mr-1"
+                  >
+                {% endif %}
+                <span class="text-xs">{{ technology.name }}</span>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Deskripsi Singkat -->
+          <p class="text-gray-600 mb-4">
+            {{ project.description|striptags|truncatewords:20 }}
+          </p>
+
+          <!-- Tombol Detail -->
+          <a
+            href="{% url 'portfolio:project_detail' project.id %}"
+            class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition"
+          >
+            Lihat Detail
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}
